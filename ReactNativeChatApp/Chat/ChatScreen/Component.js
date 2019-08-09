@@ -49,12 +49,38 @@ class ChatScreenComponent extends Component {
     render(){
         return(
             <View style={styles.MainContainer}>
-                <MessageListComponent onOptionSelection={this.onOptionSelection}
+                <MessageListComponent 
                                         renderItemActionHandler={this.renderItemActionHandler}
+                                        onOptionSelection={this.onOptionSelection}
+                                        onDateSelection={this.onDateSelection}
                                         messages= {this.state.messages}/>
-                <MessageFormComponent OnInputSubmit={this.OnInputSubmit}/>
+                <MessageFormComponent OnInputSubmit={this.OnInputSubmit}
+                                        TakePicture={this.TakePicture}/>
             </View>
         )
+    }
+
+    
+    TakePicture = (picture) => {
+        chatService.setPicture(picture)
+        var messages = chatService.getMaxMessageForPicture();
+        messages.forEach((message) => {
+            this.currentMessageId++
+            message.messageId = this.currentMessageId
+            this.messages.push(message)
+        });
+        this.setState({messages: [...this.messages]})
+    }
+
+    onDateSelection = (date) => {
+        chatService.setDate(date)
+        var messages = chatService.getMaxMessageForDate();
+        messages.forEach((message) => {
+            this.currentMessageId++
+            message.messageId = this.currentMessageId
+            this.messages.push(message)
+        });
+        this.setState({messages: [...this.messages]})
     }
 
     OnInputSubmit = (userMessage) => {
@@ -83,23 +109,23 @@ class ChatScreenComponent extends Component {
                 alert("Please select one of the options first.")
             }
         }
+    }
 
-        onOptionSelection = (option) => {
-            this.toBeCheckedBeforeSend = false
-            if (option != "No" && option != "Yes")
-            {
-                this.userInputMessage = option
-                this.sendMessage()
-            }
-
-            this.selectedOption = option
-        }
-
-        renderItemActionHandler = (eventMessage) => {
-            this.toBeCheckedBeforeSend = false
-            this.userInputMessage = eventMessage
+    onOptionSelection = (option) => {
+        this.toBeCheckedBeforeSend = false
+        if (option != "No" && option != "Yes")
+        {
+            this.userInputMessage = option
             this.sendMessage()
         }
+
+        this.selectedOption = option
+    }
+
+    renderItemActionHandler = (eventMessage) => {
+        this.toBeCheckedBeforeSend = false
+        this.userInputMessage = eventMessage
+        this.sendMessage()
     }
 }
 
