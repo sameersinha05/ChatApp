@@ -1,8 +1,10 @@
 class ChatService{
     constructor(){
 
+        this.lastPicture = null
         this.typeListCheckedBeforeSend = ["radio", "rating", "feedback"]
         this.toBeCheckedBeforeSend = false
+        this.lastSentDate = null
     }
 
     getInitialDefaultMaxMessages = () => {
@@ -25,7 +27,7 @@ class ChatService{
 
         if (responseMessage.type === "feedback")
         {
-            messages.push({text: responseMessage.outputMessage, from: "MAX", type: "userfeedback", options: [], messageId: 0})
+            messages.push({text: responseMessage.outputMessage, from: "MAX", type: "userFeedback", options: [], messageId: 0})
         }
         else if (responseMessage.type === "radio")
         {
@@ -39,6 +41,10 @@ class ChatService{
         else if (responseMessage.type === "rating")
         {
             messages.push({text: responseMessage.outputMessage, from: "MAX", type: "rating", options: [], messageId: 0})
+        }
+        else if (responseMessage.type === "Date")
+        {
+            messages.push({text: responseMessage.outputMessage, from: "User", type: "Date", options: [], messageId: 0})
         }
         else
         {
@@ -61,14 +67,14 @@ class ChatService{
                     outputMessage: "Hello from MAX!"  
                   }
             }
-            else if (userMessage.includes("ption"))
+            else if (userInputMessage.includes("ption"))
             {
                 message = {
                     type: "radio",
                     options: ["By Budget", "By Brand" ]
                 };
             }
-            else if (userMessage.includes("UserRatings:"))
+            else if (userInputMessage.includes("UserRatings:"))
             {
                 message = {
                     outputMessage: "Would you like to leave the comment for your feedback?",
@@ -76,27 +82,27 @@ class ChatService{
                     options: ["Yes", "No" ]
                 };
             }
-            else if (userMessage === "FeedBackYes")
+            else if (userInputMessage === "FeedBackYes")
             {
                 message = {
                     outputMessage: "Thanks for providing the comments",
                     type: ""
                 };
             }
-            else if (userMessage === "Speech Recognized")
+            else if (userInputMessage === "Speech Recognized")
             {
                 message = {
                     outputMessage: "I am Listnening",
                     type: ""
                 };
             }
-            else if (userMessage.includes("rating") || userMessage.includes("Rating") || userMessage.includes("Rate") || userMessage.includes("rate")) 
+            else if (userInputMessage.includes("rating") || userInputMessage.includes("Rating") || userInputMessage.includes("Rate") || userInputMessage.includes("rate")) 
             {
                 message = {
                     type: "rating"
                 };
             }
-            else if (userMessage === "By Budget" || userMessage === "By Brand")
+            else if (userInputMessage === "By Budget" || userInputMessage === "By Brand")
             {
                 message = {
                     outputMessage: "We have 4 brands which one would you like to go for?",
@@ -104,40 +110,71 @@ class ChatService{
                     options: [ "Ford", "Maruti", "Mahindra", "Hyundai" ]
                 };
             }
-            else if (userMessage === "Ford" || userMessage  === "Maruti" || userMessage === "Mahindra" || userMessage === "Hyundai")
+            else if (userInputMessage === "Ford" || userInputMessage  === "Maruti" || userInputMessage === "Mahindra" || userInputMessage === "Hyundai")
             {
                 message = {
                     type: "feedback"
                 };
             }
-            else if (userMessage === "Nice")
+            else if (userInputMessage === "Nice")
             {
                 message = {
                     type: "",
                     outputMessage: "We are glad that we are able to stand upto your expectation."
                 };
             }
-            else if (userMessage === "Normal")
+            else if (userInputMessage === "Normal")
             {
                 message = {
                     type: "",
                     outputMessage: "Your comment will be very valuable to improve"
                 };
             }
-            else if (userMessage === "Bad")
+            else if (userInputMessage === "Bad")
             {
                 message = {
                     type: "",
                     outputMessage: "Sorry for the inconvenience, could you please tell us what went wrong"
                 };
+            }else if ((userInputMessage.includes("Date") || userInputMessage.includes("date")))
+            {
+                message = {
+                    type: "Date" 
+                 };
             }
 
             return message
     }
 
+
+
     getToBeCheckedBeforeSendingValue = () => {
         return this.toBeCheckedBeforeSend;
     }
+ 
+    setPicture = (picture) => {
+        this.lastPicture = picture;
+    }
+
+    setDate = (date) => {
+        this.lastSentDate = date;
+    }
+
+    getMaxMessageForDate = () => {
+        var messages = []
+        var completeText = "Your appointment is booked on: " + this.lastSentDate
+        messages.push({text: completeText, from: "MAX", type: "", options: [], messageId: 0})
+
+        return messages
+    }
+
+    getMaxMessageForPicture = () => {
+        var messages = []
+        messages.push({text: this.lastPicture, from: "MAX", type: "image", options: [], messageId: 0})
+
+        return messages
+    }
+
 }
 
 const chatService = new ChatService();
