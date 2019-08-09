@@ -24,7 +24,7 @@ export default StyleSheet.create({
     textInputStyle:{
         textAlign:'center',
         height:40,
-        width:'90%',
+        width:'80%',
         borderWidth:1,
         backgroundColor:'#fff',
         borderRadius:20,
