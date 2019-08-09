@@ -82,7 +82,8 @@ class MessageFormComponent extends Component {
                 allowsEditing: true,
             });
 
-            this.TakePicture(pickerResult);
+            if (pickerResult.cancelled != true)
+                this.TakePicture(pickerResult);
             return this._handleImagePicked(pickerResult);
         }
     };
