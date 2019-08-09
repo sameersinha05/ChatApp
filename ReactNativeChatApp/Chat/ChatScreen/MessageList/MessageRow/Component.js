@@ -1,12 +1,13 @@
 import React, {Component} from 'react'
-import {View, Text, TouchableOpacity} from 'react-native'
+import {View, Text, Image, TouchableOpacity} from 'react-native'
 import ViewMoreText from 'react-native-view-more-text';
 import renderIf from './renderif';
 import Emoji from './Emoji';
 import { AirbnbRating} from 'react-native-ratings';
+import PropTypes from 'prop-types';
+import styles from './Styles';
 import DatePicker from 'react-native-datepicker';
-import PropTypes from 'prop-types'
-import styles from './Styles'
+// import { Image } from 'expo';
 
 class MessageRowComponent extends Component {
     constructor(props) {
@@ -16,6 +17,7 @@ class MessageRowComponent extends Component {
         this.state = {
             selectedOption: null,
             selectedFeedback: null,
+            datePickerDisable:false,
         }
     }
 
@@ -36,6 +38,11 @@ class MessageRowComponent extends Component {
         this.props.action(feedback);
         this.currentMessageId = 0
         this.setState({selectedFeedback:feedback});
+    }
+
+    onDateSelection(selectedDate) {
+        this.setState({datePickerDisable:true, date: selectedDate})
+        this.props.onDateSelection(selectedDate);
     }
 
     render() {
@@ -116,6 +123,39 @@ class MessageRowComponent extends Component {
                         </View>
                     )
                 }
+                {
+                     renderIf(this.props.type === "image")(
+                        <View>
+                            {/* <Text>{this.props.text}</Text> */}
+                            <Image source={{ isStatic: true, uri: this.props.text }} style={{ width: 150, height: 150 }} />
+                        </View>
+                     )
+                }{
+                renderIf(this.props.type === "Date")(
+                    <DatePicker
+                    style={{width: 200}}
+                    date={this.state.date} //initial date from state
+                    mode="date" //The enum of date, datetime and time
+                    placeholder="select date"
+                    format="DD-MM-YYYY"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    disabled={this.state.datePickerDisable}
+                    customStyles={{
+                        dateIcon: {
+                        position: 'absolute',
+                        left: 0,
+                        top: 4,
+                        marginLeft: 0
+                        },
+                        dateInput: {
+                            color: '#fff',
+                        marginLeft: 36 
+                        }
+                    }}
+                    onDateChange={(date) => this.onDateSelection(date)}
+                    />
+                )}
                 {/* {
                 renderIf(this.props.type == "Date" && this.props.from == "MAX")(
                 <ViewMoreText
@@ -178,11 +218,11 @@ class MessageRowComponent extends Component {
 }
 
 MessageRowComponent.propTypes = {
-    text: PropTypes.string.isRequired,
+    text: PropTypes.string,
     from: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    options: PropTypes.array.isRequired,
-    messageId: PropTypes.number.isRequired,
+    options: PropTypes.array,
+    messageId: PropTypes.number,
 }
 
 export default MessageRowComponent;
