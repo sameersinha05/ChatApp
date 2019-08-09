@@ -34,8 +34,13 @@ class MessageListComponent extends Component {
     renderItem = ({item}) => {
             return <MessageRowComponent  onOptionSelectionChanged={this.onOptionSelection}
                                             action={this.renderItemActionHandler}
+                                            onDateSelection={this.onDateSelection}
                                             type={item.type} from={item.from} text={item.text}
                                             messageId={item.messageId} options={item.options}/>
+    }
+
+    onDateSelection = (date) => {
+        this.props.onDateSelection(date);
     }
 
     OnMessageListChange =() => {
