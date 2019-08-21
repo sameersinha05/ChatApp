@@ -3,13 +3,17 @@ import { createStackNavigator, createAppContainer } from 'react-navigation'
 import ChatScreen from './Chat/ChatScreen/Component';
 import LoginScreen from './Login/LoginScreen/Component';
 import ThemeContext from './Themes/ThemeContext'
+import LogoTitle from './LogoTitle';
 
 const Stack = createStackNavigator({
         login: { screen: LoginScreen },
         chat: { screen: ChatScreen },
     },
     {
-        initialRouteName: 'login'
+        initialRouteName: 'login',
+        defaultNavigationOptions: {
+            headerTitle: <LogoTitle />
+        }
     }
 )
 
@@ -28,7 +32,7 @@ class Root extends Component{
     render() {
         return (
             <ThemeContext.Provider value={{ theme: this.state.theme }}>
-                <Navigation />
+                <Navigation screenProps = {{ theme: this.state.theme }} />
             </ThemeContext.Provider>
         )
     }

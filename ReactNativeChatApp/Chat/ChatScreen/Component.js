@@ -22,6 +22,12 @@ class ChatScreen extends Component {
         }
     }
 
+    static navigationOptions = ({ screenProps }) => {
+        return {
+            headerStyle: { backgroundColor: ChatThemeConstants[screenProps.theme].header.backgroundColor}
+        }
+    }
+
     componentWillMount() {
         var messages = chatService.getInitialDefaultMaxMessages()
         messages.forEach((message) => {

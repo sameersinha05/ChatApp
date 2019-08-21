@@ -16,6 +16,12 @@ class LoginScreen extends Component{
         }
     }
 
+    static navigationOptions = ({ screenProps }) => {
+        return {
+            headerStyle: { backgroundColor: LoginThemeConstants[screenProps.theme].header.backgroundColor}
+        }
+    }
+
     render(){
         const {navigate} = this.props.navigation
 

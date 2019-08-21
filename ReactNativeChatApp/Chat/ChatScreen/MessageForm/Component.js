@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, TextInput, TouchableOpacity, Linking } from 'react-native'
+import { View, TextInput, TouchableOpacity } from 'react-native'
 import styles from './Styles'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faPaperPlane, faMicrophone, faCamera } from '@fortawesome/free-solid-svg-icons';
