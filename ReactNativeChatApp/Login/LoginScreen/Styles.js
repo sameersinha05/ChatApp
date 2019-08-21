@@ -5,13 +5,11 @@ export default StyleSheet.create({
     MainContainer:{
         marginTop: 40,
         flex:2,
-        backgroundColor:'#303030'
     },
     MainContainerContent:{
         alignSelf: 'center',
     },
     Title:{
-        color: '#fff',
         alignSelf: 'center',
         marginTop: 40,
         marginBottom: 20,
@@ -19,12 +17,10 @@ export default StyleSheet.create({
         fontSize: 20
     },
     inputLayoutStyle: {
-        color: '#fff',
         width: 240,
         height: 40,
         paddingLeft: 20,
         borderWidth: 1,
-        borderColor: '#fff',
         borderRadius: 20,
         marginTop: 20
     },

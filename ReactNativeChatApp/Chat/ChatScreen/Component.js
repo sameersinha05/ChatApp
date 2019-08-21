@@ -1,11 +1,13 @@
 import React, {Component} from 'react'
-import {View, Text} from 'react-native'
+import {View} from 'react-native'
 import styles from './Styles'
 import MessageListComponent from './MessageList/Component'
 import MessageFormComponent from './MessageForm/Component'
 import chatService from "./../../services/chatservice"
+import ThemeContext from './../../Themes/ThemeContext'
+import ChatThemeConstants from './../../Themes/ChatThemeConstants'
 
-class ChatScreenComponent extends Component { 
+class ChatScreen extends Component { 
 
     constructor() {
         super ();
@@ -20,7 +22,7 @@ class ChatScreenComponent extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         var messages = chatService.getInitialDefaultMaxMessages()
         messages.forEach((message) => {
             this.currentMessageId++
@@ -48,15 +50,20 @@ class ChatScreenComponent extends Component {
 
     render(){
         return(
-            <View style={styles.MainContainer}>
-                <MessageListComponent 
-                                        renderItemActionHandler={this.renderItemActionHandler}
-                                        onOptionSelection={this.onOptionSelection}
-                                        onDateSelection={this.onDateSelection}
-                                        messages= {this.state.messages}/>
-                <MessageFormComponent OnInputSubmit={this.OnInputSubmit}
-                                        TakePicture={this.TakePicture}/>
-            </View>
+            <ThemeContext.Consumer>
+                {({ theme }) => (
+                        <View style={[styles.MainContainer, {backgroundColor: ChatThemeConstants[theme].page.backgroundColor}]}>
+                            <MessageListComponent 
+                                                    renderItemActionHandler={this.renderItemActionHandler}
+                                                    onOptionSelection={this.onOptionSelection}
+                                                    onDateSelection={this.onDateSelection}
+                                                    messages= {this.state.messages}/>
+                            <MessageFormComponent OnInputSubmit={this.OnInputSubmit}
+                                                    TakePicture={this.TakePicture}/>
+                        </View>
+                
+                )}
+            </ThemeContext.Consumer>
         )
     }
 
@@ -129,4 +136,4 @@ class ChatScreenComponent extends Component {
     }
 }
 
-export default ChatScreenComponent;
+export default ChatScreen;

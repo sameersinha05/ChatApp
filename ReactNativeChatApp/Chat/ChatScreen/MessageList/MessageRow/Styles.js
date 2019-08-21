@@ -61,13 +61,6 @@ export default StyleSheet.create({
     UserFeedbackStyle:{
         flexDirection:'column'
     },
-    
-    UserFeedbackContentStyle:{
-        flexDirection:'row'
-    },
-    UserFeedbackPressedContentStyle:{
-        flexDirection:'row'
-    },
     UserFeedbackOptionTextStyle:{
         paddingLeft:30,
         paddingRight:30,

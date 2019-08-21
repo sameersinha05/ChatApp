@@ -3,7 +3,9 @@ import { View, TextInput, TouchableOpacity, Linking } from 'react-native'
 import styles from './Styles'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faPaperPlane, faMicrophone, faCamera } from '@fortawesome/free-solid-svg-icons';
-import { Constants, ImagePicker, Permissions, FileSystem, MediaLibrary } from 'expo';
+import {  ImagePicker, Permissions, FileSystem, MediaLibrary } from 'expo';
+import ThemeContext from './../../../Themes/ThemeContext'
+import MessageFormThemeConstants from './../../../Themes/MessageFormThemeConstants'
 
 class MessageFormComponent extends Component {
 
@@ -16,23 +18,28 @@ class MessageFormComponent extends Component {
 
     render() {
         return (
-            <View style={styles.messageRequesterStyle}>
-                <TextInput
-                    ref={input => { this.textInput = input }}
-                    placeholder="Type a message here"
-                    onChangeText={data => this.setState({ userMessageText: data })}
-                    style={styles.textInputStyle}
-                    underlineColorAndroid='transparent'
-                />
-                <TouchableOpacity onPress={this.OnInputSubmit} activeOpacity={0.7}>
-                    {this.renderImage()}
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this._takePhoto} activeOpacity={0.7}>
-                    <View style={styles.ImageIconStyle}>
-                        <FontAwesomeIcon color='#35C3CF' icon={faCamera} />
-                    </View>
-                </TouchableOpacity>
-            </View>
+            <ThemeContext.Consumer>
+                {({ theme }) => (
+                        <View style={styles.messageRequesterStyle}>
+                            <TextInput
+                                ref={input => { this.textInput = input }}
+                                placeholder="Type a message here"
+                                onChangeText={data => this.setState({ userMessageText: data })}
+                                style={styles.textInputStyle}
+                                underlineColorAndroid='transparent'
+                            />
+                            <TouchableOpacity onPress={this.OnInputSubmit} activeOpacity={0.7}>
+                                {this.renderImage(theme)}
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this._takePhoto} activeOpacity={0.7}>
+                                <View style={styles.ImageIconStyle}>
+                                    <FontAwesomeIcon style={{color: MessageFormThemeConstants[theme].button.color}} 
+                                     icon={faCamera} />
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                )}
+            </ThemeContext.Consumer>
         )
     }
 
@@ -41,27 +48,27 @@ class MessageFormComponent extends Component {
             this.textInput.clear()
         this.props.OnInputSubmit(this.state.userMessageText)
         this.setState({ userMessageText: '' })
-        this.renderImage
     }
 
     TakePicture = (picture) => {
         this.props.TakePicture(picture.uri);
         this.setState({ userMessageText: '' })
-        this.renderImage
     }
 
 
-    renderImage = () => {
+    renderImage = (theme) => {
         if (this.state.message != '') {
             return (
                 <View style={styles.ImageIconStyle}>
-                    <FontAwesomeIcon color='#35C3CF' icon={faPaperPlane} />
+                    <FontAwesomeIcon style={{color: MessageFormThemeConstants[theme].button.color}} 
+                    icon={faPaperPlane} />
                 </View>
             )
         } else {
             return (
                 <View style={styles.ImageIconStyle}>
-                    <FontAwesomeIcon color='#35C3CF' icon={faMicrophone} />
+                    <FontAwesomeIcon style={{color: MessageFormThemeConstants[theme].button.color}} 
+                     icon={faMicrophone} />
                 </View>
             )
         }

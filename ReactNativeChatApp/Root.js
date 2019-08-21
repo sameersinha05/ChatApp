@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
-import {View} from 'react-native'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import ChatScreen from './Chat/ChatScreen/Component';
 import LoginScreen from './Login/LoginScreen/Component';
+import ThemeContext from './Themes/ThemeContext'
 
 const Stack = createStackNavigator({
         login: { screen: LoginScreen },
@@ -19,7 +19,7 @@ class Root extends Component{
     constructor(props) {
         super(props)
         this.state = {
-            theme: props.theme
+            theme: 'light'
         }
     }
     
@@ -27,7 +27,9 @@ class Root extends Component{
 
     render() {
         return (
+            <ThemeContext.Provider value={{ theme: this.state.theme }}>
                 <Navigation />
+            </ThemeContext.Provider>
         )
     }
 }
