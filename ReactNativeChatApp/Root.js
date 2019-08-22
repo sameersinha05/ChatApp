@@ -4,6 +4,8 @@ import ChatScreen from './Chat/ChatScreen/Component';
 import LoginScreen from './Login/LoginScreen/Component';
 import ThemeContext from './Themes/ThemeContext'
 import LogoTitle from './LogoTitle';
+import { connect } from 'react-redux'
+import SettingContextMenu from './ContextMenu/SettingContextMenu'
 
 const Stack = createStackNavigator({
         login: { screen: LoginScreen },
@@ -12,7 +14,8 @@ const Stack = createStackNavigator({
     {
         initialRouteName: 'login',
         defaultNavigationOptions: {
-            headerTitle: <LogoTitle />
+            headerTitle: <LogoTitle />,
+            headerRight: <SettingContextMenu />
         }
     }
 )
@@ -23,7 +26,7 @@ class Root extends Component{
     constructor(props) {
         super(props)
         this.state = {
-            theme: 'light'
+            theme: props.theme
         }
     }
     
@@ -31,11 +34,17 @@ class Root extends Component{
 
     render() {
         return (
-            <ThemeContext.Provider value={{ theme: this.state.theme }}>
-                <Navigation screenProps = {{ theme: this.state.theme }} />
+            <ThemeContext.Provider value={{ theme: this.props.theme }}>
+                <Navigation screenProps = {{ theme: this.props.theme }} />
             </ThemeContext.Provider>
         )
     }
 }
 
-export default Root;
+function mapStateToProps(state) {
+    return {
+        theme: state.themeReducer.theme
+    }
+}
+
+export default connect(mapStateToProps)(Root);

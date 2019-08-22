@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
-import {View} from 'react-native'
+import {View, Text} from 'react-native'
 import styles from './Styles'
 import MessageListComponent from './MessageList/Component'
 import MessageFormComponent from './MessageForm/Component'
 import chatService from "./../../services/chatservice"
 import ThemeContext from './../../Themes/ThemeContext'
 import ChatThemeConstants from './../../Themes/ChatThemeConstants'
+import Dialog, { DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
 
 class ChatScreen extends Component { 
 
@@ -18,6 +19,7 @@ class ChatScreen extends Component {
         this.selectedOption = null
         this.messages = []
         this.state = {
+            modalVisible: false,
             messages: []
         }
     }
@@ -59,6 +61,30 @@ class ChatScreen extends Component {
             <ThemeContext.Consumer>
                 {({ theme }) => (
                         <View style={[styles.MainContainer, {backgroundColor: ChatThemeConstants[theme].page.backgroundColor}]}>
+                            <Dialog height = {100} width = {380}
+                                visible={this.state.modalVisible}
+                                footer={
+                                <DialogFooter>
+                                    <DialogButton
+                                    text="No"
+                                    onPress={() => { this.setState({modalVisible: false})}}
+                                    />
+                                    <DialogButton
+                                    text="Yes"
+                                    onPress={() => {
+                                                        this.onPreviousContextConfirmationIgnore()
+                                                        this.setState({modalVisible: false})}
+                                                    }
+                                    />
+                                </DialogFooter>
+                                }
+                            >
+                                <DialogContent>
+                                    <View>
+                                        <Text>You have an option to be selected in previous context. Are you sure you do not want to select.</Text>
+                                    </View>
+                                </DialogContent>
+                            </Dialog>
                             <MessageListComponent 
                                                     renderItemActionHandler={this.renderItemActionHandler}
                                                     onOptionSelection={this.onOptionSelection}
@@ -97,13 +123,14 @@ class ChatScreen extends Component {
     }
 
     OnInputSubmit = (userMessage) => {
+        
+        this.userInputMessage = userMessage
         if (this.toBeCheckedBeforeSend === false)
         {
             if (userMessage != "")
             {
                 if (this.selectedOption != "Yes")
                 {
-                    this.userInputMessage = userMessage
                     this.currentMessageId++
                     var messageId = this.currentMessageId
                     this.messages.push({text: userMessage, from: "User", type: "", options: [], messageId: messageId})
@@ -117,11 +144,22 @@ class ChatScreen extends Component {
                     this.selectedOption = ""
                 }
             }
-            else
-            {
-                alert("Please select one of the options first.")
-            }
+        } 
+        else
+        {
+            this.setState({ modalVisible: true })
         }
+    }
+
+    onPreviousContextConfirmationIgnore = () => {
+        var lastMessage = this.messages.slice(-1).pop()
+        lastMessage.messageId = 0
+        this.toBeCheckedBeforeSend = false
+        this.currentMessageId++
+        var messageId = this.currentMessageId
+        this.messages.push({text: this.userInputMessage, from: "user", type: '', options: [], messageId: messageId})
+        this.setState({ messages: [...this.messages] })
+        this.sendMessage()
     }
 
     onOptionSelection = (option) => {

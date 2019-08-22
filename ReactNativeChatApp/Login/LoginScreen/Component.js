@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import ThemeContext from './../../Themes/ThemeContext'
 import LoginThemeConstants from './../../Themes/LoginThemeConstants'
+import SettingContextMenu from './../../ContextMenu/SettingContextMenu'
 
 class LoginScreen extends Component{
     constructor(props) {
@@ -30,7 +31,7 @@ class LoginScreen extends Component{
                 {({ theme }) => (
                         <View style={[styles.MainContainer, {backgroundColor: LoginThemeConstants[theme].page.backgroundColor }]}>
                             <View style={styles.MainContainerContent}>
-                                <Text style={styles.Title}>Sign In</Text>
+                                <Text style={[styles.Title, {color: LoginThemeConstants[theme].page.color }]}>Sign In</Text>
                                 <TextInput
                                     placeholder = "Your EmailId:"
                                     onChangeText = {data => this.setState({ emailId: data }) }
