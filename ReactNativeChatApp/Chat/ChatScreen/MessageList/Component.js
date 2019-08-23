@@ -6,7 +6,7 @@ import MessageRowComponent from './MessageRow/Component'
 import { Dimensions } from 'react-native';
 
 const height = Dimensions.get('window').height;
-const messageListHeight = height - 150
+const messageListHeight = height - 180
 
 class MessageListComponent extends Component { 
 
