@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, Image, TouchableOpacity} from 'react-native'
+import {View, Text, Image, StyleSheet,TouchableOpacity} from 'react-native'
 import ViewMoreText from 'react-native-view-more-text';
 import renderIf from './renderif';
 import Emoji from './Emoji';
@@ -10,6 +10,9 @@ import DatePicker from 'react-native-datepicker';
 import MessageRowThemeConstants from './../../../../Themes/MessageRowThemeConstants'
 import ThemeContext from './../../../../Themes/ThemeContext'
 // import { Image } from 'expo';
+import * as Permissions from 'expo-permissions';
+
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 class MessageRowComponent extends Component {
     static currentTheme = "dark"
@@ -21,8 +24,26 @@ class MessageRowComponent extends Component {
             selectedOption: null,
             selectedFeedback: null,
             datePickerDisable:false,
+            hasCameraPermission: null,
+            scanned: false
         }
     }
+
+    async componentDidMount() {
+        this.getPermissionsAsync();
+    }
+
+    getPermissionsAsync = async () => {
+        const { status } = await Permissions.askAsync(Permissions.CAMERA);
+        this.setState({ hasCameraPermission: status === 'granted' });
+    };
+
+    handleBarCodeScanned = ({ type, data }) => {
+        // alert(`Bar code with type ${type} and data ${data} has been scanned!`);   
+         this.setState({ scanned: true });
+         this.props.onBarcodeSelection(data);
+ 
+     };
 
     componentWillMount() {
         this.currentMessageId = this.props.messageId
@@ -115,7 +136,8 @@ class MessageRowComponent extends Component {
     }
 
     render() {
-        
+        const { hasCameraPermission, scanned } = this.state;
+
         return(
             <ThemeContext.Consumer>
                 {({ theme }) => (
@@ -200,6 +222,16 @@ class MessageRowComponent extends Component {
                                 onDateChange={(date) => this.onDateSelection(date)}
                                 />
                             )}
+                            {
+                                renderIf(this.props.type === "Barcode")(
+                                    <View style={{ width: 400,height:300 }}>
+                                        <BarCodeScanner
+                                            onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
+                                            style={StyleSheet.absoluteFillObject}
+                                        />
+                                    </View>
+                                    
+                                )}
                         </View>
                 )}
             </ThemeContext.Consumer>

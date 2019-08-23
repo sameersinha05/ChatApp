@@ -39,6 +39,7 @@ class MessageListComponent extends Component {
             return <MessageRowComponent  onOptionSelectionChanged={this.onOptionSelection}
                                             action={this.renderItemActionHandler}
                                             onDateSelection={this.onDateSelection}
+                                            onBarcodeSelection={this.onBarcodeSelection}
                                             type={item.type} from={item.from} text={item.text}
                                             messageId={item.messageId} options={item.options}/>
     }
@@ -46,7 +47,11 @@ class MessageListComponent extends Component {
     onDateSelection = (date) => {
         this.props.onDateSelection(date);
     }
-
+    
+    onBarcodeSelection = (code) => {
+        this.props.onBarcodeSelection(code);
+    }
+    
     OnMessageListChange =() => {
             this.flatList.scrollToOffset({
                     offset: this.props.messages.length,

@@ -91,6 +91,7 @@ class ChatScreen extends Component {
                                                     renderItemActionHandler={this.renderItemActionHandler}
                                                     onOptionSelection={this.onOptionSelection}
                                                     onDateSelection={this.onDateSelection}
+                                                    onBarcodeSelection={this.onBarcodeSelection}
                                                     messages= {this.state.messages}/>
                             <MessageFormComponent OnInputSubmit={this.OnInputSubmit}
                                                     TakePicture={this.TakePicture}/>
@@ -123,7 +124,20 @@ class ChatScreen extends Component {
         });
         this.setState({messages: [...this.messages]})
     }
+     
+    onBarcodeSelection = (code) => {
+        chatService.setBarcode(code)
+        var messages = chatService.getMaxMessageForBarcode();
+        messages.forEach((message) => {
+            this.currentMessageId++
+            message.messageId = this.currentMessageId
+            this.messages.push(message)
+        });
 
+        this.messages.splice(this.currentMessageId-2, 1)
+        this.setState({messages: [...this.messages]})
+    }
+    
     OnInputSubmit = (userMessage) => {
         
         this.userInputMessage = userMessage

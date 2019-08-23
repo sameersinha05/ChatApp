@@ -4,7 +4,8 @@ class ChatService{
         this.lastPicture = null
         this.typeListCheckedBeforeSend = ["radio", "rating", "feedback"]
         this.toBeCheckedBeforeSend = false
-        this.lastSentDate = null
+        this.lastSentDate = null;
+        this.barcode=null;
     }
 
     getInitialDefaultMaxMessages = () => {
@@ -45,6 +46,10 @@ class ChatService{
         else if (responseMessage.type === "Date")
         {
             messages.push({text: responseMessage.outputMessage, from: "User", type: "Date", options: [], messageId: 0})
+        }
+        else if (responseMessage.type === "Barcode")
+        {
+            messages.push({text: responseMessage.outputMessage, from: "User", type: "Barcode", options: [], messageId: 0})
         }
         else
         {
@@ -142,7 +147,12 @@ class ChatService{
                     type: "Date" 
                  };
             }
-
+            else if ((userInputMessage.includes("Barcode") || userInputMessage.includes("barcode")))
+            {                 
+                message = {
+                    type: "Barcode" 
+                 };
+            } 
             return message
     }
 
@@ -158,6 +168,18 @@ class ChatService{
 
     setDate = (date) => {
         this.lastSentDate = date;
+    }
+
+    setBarcode = (code) => {
+        this.barcode = code;
+    }
+
+    getMaxMessageForBarcode = () => {
+        var messages = []
+        var completeText = "Barcode is scanned: " + this.barcode
+        messages.push({text: completeText, from: "MAX", type: "", options: [], messageId: 0})
+
+        return messages
     }
 
     getMaxMessageForDate = () => {
