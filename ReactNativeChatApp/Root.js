@@ -15,7 +15,7 @@ const Stack = createStackNavigator({
         initialRouteName: 'login',
         defaultNavigationOptions: {
             headerTitle: <LogoTitle />,
-            headerRight: <SettingContextMenu />
+            //headerRight: <SettingContextMenu />
         }
     }
 )

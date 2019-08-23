@@ -22,6 +22,8 @@ class SettingContextMenu extends Component {
     }
 
     render() {
+        //const {navigate} = this.props.navigation;
+
         return (
             <View style={{marginRight: 20}}>
                 <Menu>
@@ -35,6 +37,9 @@ class SettingContextMenu extends Component {
                         <MenuOption onSelect = {this.darkThemeSelected}>
                             <Text style={{color: '#3D3D3D'}} >dark </Text>
                         </MenuOption>
+                        {/* <MenuOption onSelect ={() => navigate("chat", {screen: "ChatScreen"})}>
+                            <Text style={{color: '#3D3D3D'}} >Settings </Text>                            
+                        </MenuOption> */}
                     </MenuOptions>
                 </Menu>
             </View>

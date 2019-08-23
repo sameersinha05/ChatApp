@@ -7,6 +7,7 @@ import chatService from "./../../services/chatservice"
 import ThemeContext from './../../Themes/ThemeContext'
 import ChatThemeConstants from './../../Themes/ChatThemeConstants'
 import Dialog, { DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
+import SettingContextMenu from './../../ContextMenu/SettingContextMenu'
 
 class ChatScreen extends Component { 
 
@@ -26,7 +27,8 @@ class ChatScreen extends Component {
 
     static navigationOptions = ({ screenProps }) => {
         return {
-            headerStyle: { backgroundColor: ChatThemeConstants[screenProps.theme].header.backgroundColor}
+            headerStyle: { backgroundColor: ChatThemeConstants[screenProps.theme].header.backgroundColor},
+            headerRight: <SettingContextMenu />
         }
     }
 
