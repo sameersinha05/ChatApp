@@ -32,6 +32,9 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.max.max"
     }
   }
 }
