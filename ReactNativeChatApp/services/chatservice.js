@@ -1,11 +1,19 @@
 class ChatService{
     constructor(){
 
+        this.context = ''
+        this.baseUrl = ''
         this.lastPicture = null
-        this.typeListCheckedBeforeSend = ["radio", "rating", "feedback"]
+        this.typeListCheckedBeforeSend = ["Select", "Rating", "Feedback"]
         this.toBeCheckedBeforeSend = false
         this.lastSentDate = null;
         this.barcode=null;
+    }
+
+    initialize = (baseUrl, context) =>
+    {
+        this.baseUrl = baseUrl
+        this.context = context
     }
 
     getInitialDefaultMaxMessages = () => {
@@ -15,148 +23,217 @@ class ChatService{
         return messages        
     }
         
+    // getMaxMessages = (responseMessage) => {
+    //     var messages = []
+    //     if (this.typeListCheckedBeforeSend.includes(responseMessage.type))
+    //     {
+    //         this.toBeCheckedBeforeSend = true   
+    //     }
+    //     else
+    //     {
+    //         this.toBeCheckedBeforeSend = false   
+    //     }
+
+    //     if (responseMessage.type === "feedback")
+    //     {
+    //         messages.push({text: responseMessage.outputMessage, from: "MAX", type: "userFeedback", options: [], messageId: 0})
+    //     }
+    //     else if (responseMessage.type === "radio")
+    //     {
+    //         if (responseMessage.outputMessage != undefined && responseMessage.outputMessage != "")
+    //         {
+    //             messages.push({text: responseMessage.outputMessage, from: "MAX", type: "", options: [], messageId: 0})
+    //         }
+
+    //         messages.push({text: responseMessage.outputMessage, from: "MAX", type: "radio", options: responseMessage.options, messageId: 0})
+    //     }
+    //     else if (responseMessage.type === "rating")
+    //     {
+    //         messages.push({text: responseMessage.outputMessage, from: "MAX", type: "rating", options: [], messageId: 0})
+    //     }
+    //     else if (responseMessage.type === "Date")
+    //     {
+    //         messages.push({text: responseMessage.outputMessage, from: "User", type: "Date", options: [], messageId: 0})
+    //     }
+    //     else if (responseMessage.type === "Barcode")
+    //     {
+    //         messages.push({text: responseMessage.outputMessage, from: "User", type: "Barcode", options: [], messageId: 0})
+    //     }
+    //     else
+    //     {
+    //         messages.push({text: responseMessage.outputMessage, from: "MAX", type: "", options: [], messageId: 0})
+    //     }
+
+    //     return messages
+    // }
+
+    // mockSendMessage = (userInputMessage) => {
+        
+    //     alert (this.baseUrl)
+    //     alert (this.context)
+    //         var message = {
+    //                       type: '',
+    //                       outputMessage: "Sorry unable to process your query, we will contact you shortly!"  
+    //                     }
+
+    //         if (userInputMessage === "Hello" || userInputMessage === "hello" ||userInputMessage === "Hi" ||userInputMessage === "hi")
+    //         {
+    //             message = {
+    //                 type: '',
+    //                 outputMessage: "Hello from MAX!"  
+    //               }
+    //         }
+    //         else if (userInputMessage.includes("ption"))
+    //         {
+    //             message = {
+    //                 type: "radio",
+    //                 options: ["By Budget", "By Brand" ]
+    //             };
+    //         }
+    //         else if (userInputMessage.includes("UserRatings:"))
+    //         {
+    //             message = {
+    //                 outputMessage: "Would you like to leave the comment for your feedback?",
+    //                 type: "radio",
+    //                 options: ["Yes", "No" ]
+    //             };
+    //         }
+    //         else if (userInputMessage === "FeedBackYes")
+    //         {
+    //             message = {
+    //                 outputMessage: "Thanks for providing the comments",
+    //                 type: ""
+    //             };
+    //         }
+    //         else if (userInputMessage === "Speech Recognized")
+    //         {
+    //             message = {
+    //                 outputMessage: "I am Listnening",
+    //                 type: ""
+    //             };
+    //         }
+    //         else if (userInputMessage.includes("rating") || userInputMessage.includes("Rating") || userInputMessage.includes("Rate") || userInputMessage.includes("rate")) 
+    //         {
+    //             message = {
+    //                 type: "rating"
+    //             };
+    //         }
+    //         else if (userInputMessage === "By Budget" || userInputMessage === "By Brand")
+    //         {
+    //             message = {
+    //                 outputMessage: "We have 4 brands which one would you like to go for?",
+    //                 type: "radio",
+    //                 options: [ "Ford", "Maruti", "Mahindra", "Hyundai" ]
+    //             };
+    //         }
+    //         else if (userInputMessage === "Ford" || userInputMessage  === "Maruti" || userInputMessage === "Mahindra" || userInputMessage === "Hyundai")
+    //         {
+    //             message = {
+    //                 type: "feedback"
+    //             };
+    //         }
+    //         else if (userInputMessage === "Nice")
+    //         {
+    //             message = {
+    //                 type: "",
+    //                 outputMessage: "We are glad that we are able to stand upto your expectation."
+    //             };
+    //         }
+    //         else if (userInputMessage === "Normal")
+    //         {
+    //             message = {
+    //                 type: "",
+    //                 outputMessage: "Your comment will be very valuable to improve"
+    //             };
+    //         }
+    //         else if (userInputMessage === "Bad")
+    //         {
+    //             message = {
+    //                 type: "",
+    //                 outputMessage: "Sorry for the inconvenience, could you please tell us what went wrong"
+    //             };
+    //         }else if ((userInputMessage.includes("Date") || userInputMessage.includes("date")))
+    //         {
+    //             message = {
+    //                 type: "Date" 
+    //              };
+    //         }
+    //         else if ((userInputMessage.includes("Barcode") || userInputMessage.includes("barcode")))
+    //         {                 
+    //             message = {
+    //                 type: "Barcode" 
+    //              };
+    //         } 
+    //         return message
+    // }
+
     getMaxMessages = (responseMessage) => {
-        var messages = []
-        if (this.typeListCheckedBeforeSend.includes(responseMessage.type))
-        {
-            this.toBeCheckedBeforeSend = true   
-        }
-        else
-        {
-            this.toBeCheckedBeforeSend = false   
-        }
-
-        if (responseMessage.type === "feedback")
-        {
-            messages.push({text: responseMessage.outputMessage, from: "MAX", type: "userFeedback", options: [], messageId: 0})
-        }
-        else if (responseMessage.type === "radio")
-        {
-            if (responseMessage.outputMessage != undefined && responseMessage.outputMessage != "")
-            {
-                messages.push({text: responseMessage.outputMessage, from: "MAX", type: "", options: [], messageId: 0})
-            }
-
-            messages.push({text: responseMessage.outputMessage, from: "MAX", type: "radio", options: responseMessage.options, messageId: 0})
-        }
-        else if (responseMessage.type === "rating")
-        {
-            messages.push({text: responseMessage.outputMessage, from: "MAX", type: "rating", options: [], messageId: 0})
-        }
-        else if (responseMessage.type === "Date")
-        {
-            messages.push({text: responseMessage.outputMessage, from: "User", type: "Date", options: [], messageId: 0})
-        }
-        else if (responseMessage.type === "Barcode")
-        {
-            messages.push({text: responseMessage.outputMessage, from: "User", type: "Barcode", options: [], messageId: 0})
-        }
-        else
-        {
-            messages.push({text: responseMessage.outputMessage, from: "MAX", type: "", options: [], messageId: 0})
-        }
-
-        return messages
-    }
-
-    mockSendMessage = (userInputMessage) => {
-            var message = {
-                          type: '',
-                          outputMessage: "Sorry unable to process your query, we will contact you shortly!"  
-                        }
-
-            if (userInputMessage === "Hello" || userInputMessage === "hello" ||userInputMessage === "Hi" ||userInputMessage === "hi")
-            {
-                message = {
-                    type: '',
-                    outputMessage: "Hello from MAX!"  
-                  }
-            }
-            else if (userInputMessage.includes("ption"))
-            {
-                message = {
-                    type: "radio",
-                    options: ["By Budget", "By Brand" ]
-                };
-            }
-            else if (userInputMessage.includes("UserRatings:"))
-            {
-                message = {
-                    outputMessage: "Would you like to leave the comment for your feedback?",
-                    type: "radio",
-                    options: ["Yes", "No" ]
-                };
-            }
-            else if (userInputMessage === "FeedBackYes")
-            {
-                message = {
-                    outputMessage: "Thanks for providing the comments",
-                    type: ""
-                };
-            }
-            else if (userInputMessage === "Speech Recognized")
-            {
-                message = {
-                    outputMessage: "I am Listnening",
-                    type: ""
-                };
-            }
-            else if (userInputMessage.includes("rating") || userInputMessage.includes("Rating") || userInputMessage.includes("Rate") || userInputMessage.includes("rate")) 
-            {
-                message = {
-                    type: "rating"
-                };
-            }
-            else if (userInputMessage === "By Budget" || userInputMessage === "By Brand")
-            {
-                message = {
-                    outputMessage: "We have 4 brands which one would you like to go for?",
-                    type: "radio",
-                    options: [ "Ford", "Maruti", "Mahindra", "Hyundai" ]
-                };
-            }
-            else if (userInputMessage === "Ford" || userInputMessage  === "Maruti" || userInputMessage === "Mahindra" || userInputMessage === "Hyundai")
-            {
-                message = {
-                    type: "feedback"
-                };
-            }
-            else if (userInputMessage === "Nice")
-            {
-                message = {
-                    type: "",
-                    outputMessage: "We are glad that we are able to stand upto your expectation."
-                };
-            }
-            else if (userInputMessage === "Normal")
-            {
-                message = {
-                    type: "",
-                    outputMessage: "Your comment will be very valuable to improve"
-                };
-            }
-            else if (userInputMessage === "Bad")
-            {
-                message = {
-                    type: "",
-                    outputMessage: "Sorry for the inconvenience, could you please tell us what went wrong"
-                };
-            }else if ((userInputMessage.includes("Date") || userInputMessage.includes("date")))
-            {
-                message = {
-                    type: "Date" 
-                 };
-            }
-            else if ((userInputMessage.includes("Barcode") || userInputMessage.includes("barcode")))
-            {                 
-                message = {
-                    type: "Barcode" 
-                 };
-            } 
-            return message
-    }
-
-
+        //  console.log(responseMessage)
+          //return responseMessage.ConversationID
+          var messages = []
+          var type = ""
+          var options = []
+          this.toBeCheckedBeforeSend = false
+          if (responseMessage.control == undefined || responseMessage.control.length ==0)
+          {
+              messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: options, messageId: 0 })
+          }
+          else if (responseMessage.control[0].type == "Select")
+          {
+              this.toBeCheckedBeforeSend = true
+              type = "radio"
+              options = responseMessage.control[0].data
+              messages.push({ text: responseMessage.message.text, from: "MAX", type: "", options: [], messageId: 0 })
+              messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: options, messageId: 0 })
+          }
+          else if (responseMessage.control[0].type == "DatePicker")
+          {
+              this.toBeCheckedBeforeSend = true
+              type = "Date"
+              messages.push({ text: responseMessage.message.text, from: "MAX", type: "", options: [], messageId: 0 })
+              messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: options, messageId: 0 })
+          }
+          else if (responseMessage.control[0].type == "Barcode") {
+              this.toBeCheckedBeforeSend = true
+              type = "Barcode"
+              messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: [], messageId: 0 })
+          }
+          else if (responseMessage.control[0].type == "Rating") {
+            this.toBeCheckedBeforeSend = true
+            type = "rating"
+            messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: [], messageId: 0 })
+          }
+          else if (responseMessage.control[0].type == "Feedback") {
+            this.toBeCheckedBeforeSend = true
+            type = "userFeedback"
+            messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: [], messageId: 0 })
+          }
+  
+          // if (responseMessage.Response.contains("feedback")) {
+          //     messages.push({ text: responseMessage.outputMessage, from: "MAX", type: "userFeedback", options: [], messageId: 0 })
+          // }
+          // else if (responseMessage.type === "radio") {
+          //     if (responseMessage.outputMessage != undefined && responseMessage.outputMessage != "") {
+          //         messages.push({ text: responseMessage.outputMessage, from: "MAX", type: "", options: [], messageId: 0 })
+          //     }
+  
+          //     messages.push({ text: responseMessage.outputMessage, from: "MAX", type: "radio", options: responseMessage.options, messageId: 0 })
+          // }
+          // else if (responseMessage.type === "rating") {
+          //     messages.push({ text: responseMessage.outputMessage, from: "MAX", type: "rating", options: [], messageId: 0 })
+          // }
+          // else if (responseMessage.type === "Date") {
+          //     messages.push({ text: responseMessage.outputMessage, from: "User", type: "Date", options: [], messageId: 0 })
+          // }
+          // else if (responseMessage.type === "Barcode") {
+          //     messages.push({ text: responseMessage.outputMessage, from: "User", type: "Barcode", options: [], messageId: 0 })
+          // }
+          // else {
+          //     messages.push({ text: responseMessage.outputMessage, from: "MAX", type: "", options: [], messageId: 0 })
+          // }
+  
+          return messages
+      }
 
     getToBeCheckedBeforeSendingValue = () => {
         return this.toBeCheckedBeforeSend;
@@ -196,6 +273,26 @@ class ChatService{
 
         return messages
     }
+
+    async getApiData() {
+        var url = this.baseUrl + "/api/HR/ConverseAsync";
+        return fetch(url,{
+            method: 'POST',
+            body: JSON.stringify(
+                {
+                    "DeviceName": "string",
+                    "ConversationKey": this.context
+                  }
+            ),
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              }
+             }).catch(function (error) {
+       console.log("-------- error ------- "+error);
+       alert("result:"+error)
+       });
+     }
 
 }
 

@@ -8,6 +8,7 @@ import ThemeContext from './../../Themes/ThemeContext'
 import ChatThemeConstants from './../../Themes/ChatThemeConstants'
 import Dialog, { DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
 import SettingContextMenu from './../../ContextMenu/SettingContextMenu'
+import { connect } from 'react-redux'
 
 class ChatScreen extends Component { 
 
@@ -43,10 +44,15 @@ class ChatScreen extends Component {
         this.setState({messages: [...this.messages]})
     }
 
+    componentDidMount() {
+        chatService.initialize(this.props.baseUrl, this.props.context)
+    }
+
 
     sendMessage()
     {
-        var responseJson = chatService.mockSendMessage(this.userInputMessage)
+        chatService.getApiData(this.userInputMessage).then((response => response.json())).then(responseJson => {
+            
         var maxMessages = chatService.getMaxMessages(responseJson)
         maxMessages.forEach((message) => {
             this.currentMessageId++
@@ -56,6 +62,7 @@ class ChatScreen extends Component {
         
         this.setState({messages: [...this.messages]})
         this.toBeCheckedBeforeSend = chatService.getToBeCheckedBeforeSendingValue()
+        })
     }
 
     render(){
@@ -196,4 +203,15 @@ class ChatScreen extends Component {
     }
 }
 
-export default ChatScreen;
+function mapStateToProps(state) {
+    if (state.apiEnvironmentReducer != undefined)
+    {
+        return {
+            baseUrl: state.apiEnvironmentReducer.baseUrl,
+            context: state.apiEnvironmentReducer.context
+        }
+    }
+}
+
+export default connect(mapStateToProps)(ChatScreen);
+

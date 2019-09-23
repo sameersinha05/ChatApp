@@ -5,7 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import ThemeContext from './../../Themes/ThemeContext'
 import LoginThemeConstants from './../../Themes/LoginThemeConstants'
-import SettingContextMenu from './../../ContextMenu/SettingContextMenu'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as Actions from './../../store/apiEnvironment/action'
 
 class LoginScreen extends Component{
     constructor(props) {
@@ -23,6 +25,12 @@ class LoginScreen extends Component{
         }
     }
 
+    onPress = (navigate) => {
+        navigate("chat", {screen: "ChatScreen"})
+        var env = { baseUrl: this.state.emailId, context: this.state.password }
+        this.props.setApiEnvironments(env)
+    }
+
     render(){
         const {navigate} = this.props.navigation
 
@@ -33,7 +41,8 @@ class LoginScreen extends Component{
                             <View style={styles.MainContainerContent}>
                                 <Text style={[styles.Title, {color: LoginThemeConstants[theme].page.color }]}>Sign In</Text>
                                 <TextInput
-                                    placeholder = "Your EmailId:"
+                                    placeholder = "BaseUrl:"
+                                    // placeholder = "Your EmailId:"
                                     onChangeText = {data => this.setState({ emailId: data }) }
                                     style = {[styles.inputLayoutStyle, 
                                         { borderColor: LoginThemeConstants[theme].page.borderColor },
@@ -41,8 +50,9 @@ class LoginScreen extends Component{
                                     ]} underlineColorAndroid = 'transparent'
                                 /> 
                                 <TextInput
-                                    secureTextEntry = {true}
-                                    placeholder = "password:"
+                                    // secureTextEntry = {true}
+                                    // placeholder = "password:"
+                                    placeholder = "ApiContext:"
                                     onChangeText = {data => this.setState({ password: data }) }
                                     style = {[styles.inputLayoutStyle, 
                                         { borderColor: LoginThemeConstants[theme].page.borderColor },
@@ -53,7 +63,7 @@ class LoginScreen extends Component{
                                 <TouchableOpacity style = {[styles.SubmitButtonStyle, 
                                                     { backgroundColor: LoginThemeConstants[theme].button.backgroundColor },
                                                     { borderColor: LoginThemeConstants[theme].page.borderColor }]}
-                                    onPress = {() => navigate("chat", {screen: "ChatScreen"})}
+                                                    onPress = {() => this.onPress(navigate)}
                                     >
                                     <View style = {styles.SubmitButtonContentStyle}>
                                         <Text style = {{paddingTop: 5, alignSelf: 'flex-start', color: '#fff'}}>CONFIRM</Text>
@@ -70,4 +80,8 @@ class LoginScreen extends Component{
     }
 }
 
-export default LoginScreen;
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators (Actions, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(LoginScreen);
