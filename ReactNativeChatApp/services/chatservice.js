@@ -174,39 +174,41 @@ class ChatService{
           var type = ""
           var options = []
           this.toBeCheckedBeforeSend = false
-          if (responseMessage.control == undefined || responseMessage.control.length ==0)
+          console.log(responseMessage[0])
+          console.log(responseMessage[0].Message)
+          if (responseMessage[0].Controls == undefined || responseMessage[0].Controls.length ==0)
           {
-              messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: options, messageId: 0 })
+              messages.push({ text: responseMessage[0].Message.Message, from: "MAX", type: type, options: options, messageId: 0 })
           }
-          else if (responseMessage.control[0].type == "Select")
+          else if (responseMessage[0].Controls[0].Type == "Select")
           {
               this.toBeCheckedBeforeSend = true
               type = "radio"
-              options = responseMessage.control[0].data
-              messages.push({ text: responseMessage.message.text, from: "MAX", type: "", options: [], messageId: 0 })
-              messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: options, messageId: 0 })
+              options = responseMessage[0].Controls[0].Data
+              messages.push({ text: responseMessage[0].Message.Message, from: "MAX", type: "", options: [], messageId: 0 })
+              messages.push({ text: responseMessage[0].Message.Message, from: "MAX", type: type, options: options, messageId: 0 })
           }
-          else if (responseMessage.control[0].type == "DatePicker")
+          else if (responseMessage[0].Controls[0].Type == "DatePicker")
           {
               this.toBeCheckedBeforeSend = true
               type = "Date"
-              messages.push({ text: responseMessage.message.text, from: "MAX", type: "", options: [], messageId: 0 })
-              messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: options, messageId: 0 })
+              messages.push({ text: responseMessage[0].Message.Message, from: "MAX", type: "", options: [], messageId: 0 })
+              messages.push({ text: responseMessage[0].Message.Message, from: "MAX", type: type, options: options, messageId: 0 })
           }
-          else if (responseMessage.control[0].type == "Barcode") {
+          else if (responseMessage[0].Controls[0].Type == "Barcode") {
               this.toBeCheckedBeforeSend = true
               type = "Barcode"
-              messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: [], messageId: 0 })
+              messages.push({ text: responseMessage[0].Message.Message, from: "MAX", type: type, options: [], messageId: 0 })
           }
-          else if (responseMessage.control[0].type == "Rating") {
+          else if (responseMessage[0].Controls[0].Type == "Rating") {
             this.toBeCheckedBeforeSend = true
             type = "rating"
-            messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: [], messageId: 0 })
+            messages.push({ text: responseMessage[0].Message.Message, from: "MAX", type: type, options: [], messageId: 0 })
           }
-          else if (responseMessage.control[0].type == "Feedback") {
+          else if (responseMessage[0].Control[0].type == "Feedback") {
             this.toBeCheckedBeforeSend = true
             type = "userFeedback"
-            messages.push({ text: responseMessage.message.text, from: "MAX", type: type, options: [], messageId: 0 })
+            messages.push({ text: responseMessage[0].Message.Message, from: "MAX", type: type, options: [], messageId: 0 })
           }
   
           // if (responseMessage.Response.contains("feedback")) {
@@ -274,21 +276,27 @@ class ChatService{
         return messages
     }
 
-    async getApiData() {
-        var url = this.baseUrl + "/api/HR/ConverseAsync";
+    async getApiData(userInputMessage) {
+        var url = this.baseUrl + "/api/v1/MaxStateMachine/ConverseAsync";
         return fetch(url,{
             method: 'POST',
             body: JSON.stringify(
                 {
-                    "DeviceName": "string",
-                    "ConversationKey": this.context
+                    "MessageDisplayedOnUI": userInputMessage,
+                    "MessageToProcess": userInputMessage,
+                    "UserName": "MaxMobile",
+                    "Email": "MaxMobile@socgen.com",
+                    "LoginId": "MaxMobile@socgen.com",
+                    "TimeStamp":"2019-09-24T09:17:32.642Z",
+                    "SelectedFilter": "string"
                   }
             ),
               headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json-patch+json',
+
               }
-             }).catch(function (error) {
+             }, {mode: 'no-cors'}).catch(function (error) {
        console.log("-------- error ------- "+error);
        alert("result:"+error)
        });
