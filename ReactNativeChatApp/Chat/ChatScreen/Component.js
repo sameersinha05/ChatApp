@@ -22,6 +22,7 @@ class ChatScreen extends Component {
         this.messages = []
         this.state = {
             modalVisible: false,
+            messageListFlexHeight: messageListHeight,
             messages: []
         }
     }
@@ -65,6 +66,14 @@ class ChatScreen extends Component {
         })
     }
 
+    _keyboardDidShow = () => {
+        this.setState({messageListFlexHeight: messageListHeight-260})
+        }
+
+    _keyboardDidHide = () => {
+        this.setState({messageListFlexHeight: messageListHeight})
+        }
+
     render(){
         return(
             <ThemeContext.Consumer>
@@ -94,14 +103,18 @@ class ChatScreen extends Component {
                                     </View>
                                 </DialogContent>
                             </Dialog>
-                            <MessageListComponent 
-                                                    renderItemActionHandler={this.renderItemActionHandler}
-                                                    onOptionSelection={this.onOptionSelection}
-                                                    onDateSelection={this.onDateSelection}
-                                                    onBarcodeSelection={this.onBarcodeSelection}
-                                                    messages= {this.state.messages}/>
+                            <View style={[{height: this.state.messageListFlexHeight}]}>
+                                <MessageListComponent 
+                                                        renderItemActionHandler={this.renderItemActionHandler}
+                                                        onOptionSelection={this.onOptionSelection}
+                                                        onDateSelection={this.onDateSelection}
+                                                        onBarcodeSelection={this.onBarcodeSelection}
+                                                        messages= {this.state.messages}/>
+                            </View>
                             <MessageFormComponent OnInputSubmit={this.OnInputSubmit}
-                                                    TakePicture={this.TakePicture}/>
+                                                    TakePicture={this.TakePicture}
+                                                    _keyboardDidShow={this._keyboardDidShow}
+                                                    _keyboardDidHide={this._keyboardDidHide}/>
                         </View>
                 
                 )}

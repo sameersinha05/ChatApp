@@ -13,7 +13,7 @@ class MessageListComponent extends Component {
     render(){
         return(
             <View style={styles.messageCompleteStyle}>
-                <FlatList style={[styles.messageDisplayStyle, {height: messageListHeight}]} 
+                <FlatList
                     ref = {(ref) => {this.flatList = ref; }}
                     data={this.props.messages} 
                     extraData= {this.props.messages}

@@ -6,9 +6,6 @@ export default StyleSheet.create({
         margin:10,
         flexDirection: 'column'
     },
-    messageDisplayStyle:{
-        height: 480
-    },
     InRowStyle:{
         flexDirection: 'row'
     },
