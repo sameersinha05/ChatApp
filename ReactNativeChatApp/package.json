@@ -14,7 +14,7 @@
     "expo": "^33.0.0",
     "expo-camera": "~5.0.1",
     "expo-cli": "^3.0.10",
-    "moment": "^2.22.1",
+    "moment": "^2.29.2",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "0.59.8",
