@@ -11,7 +11,7 @@
     "@fortawesome/fontawesome-svg-core": "1.2.19",
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@fortawesome/react-native-fontawesome": "^0.1.0",
-    "expo": "^33.0.0",
+    "expo": "^46.0.16",
     "expo-camera": "~5.0.1",
     "expo-cli": "^3.0.10",
     "moment": "^2.22.1",
