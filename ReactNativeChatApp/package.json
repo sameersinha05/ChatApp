@@ -13,7 +13,7 @@
     "@fortawesome/react-native-fontawesome": "^0.1.0",
     "expo": "^33.0.0",
     "expo-camera": "~5.0.1",
-    "expo-cli": "^3.0.10",
+    "expo-cli": "^6.0.8",
     "moment": "^2.22.1",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
